@@ -1,26 +1,39 @@
-const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+
 
 const renderer = new THREE.WebGLRenderer();
-renderer.setSize( window.innerWidth, window.innerHeight );
+
+renderer.setSize(window.innerWidth, window.innerHeight);
+
 document.body.appendChild(renderer.domElement);
 
+const scene = new THREE.Scene();
 
-camera.position.set(0, 0, 100);
-camera.lookAt(0,0,0);
+const camera = new THREE.PerspectiveCamera(
+    110,
+    window.innerWidth / window.innerHeight,
+    0.01,
+    1000
+)
 
-const material = new THREE.LineBasicMaterial({ color: 0x0000ff });
+const axesHelper = new THREE.AxesHelper(2);
+scene.add(axesHelper);
 
-const points = [];
+camera.position.set(0, 2, 5);
 
-points.push(new THREE.Vector3( -10, 0, 0));
-points.push(new THREE.Vector3( 0, 10, 0));
-points.push(new THREE.Vector3( 10, 0, 0));
+const boxGeometry = new THREE.BoxGeometry();
+const boxMaterial = new THREE.MeshBasicMaterial({
+    color: 0x00FF00
+})
 
-const geometry = new THREE.BufferGeometry().setFromPoints(points)
+const box = new THREE.Mesh(boxGeometry, boxMaterial)
 
-const lines = new THREE.Line(geometry, material);
+scene.add(box)
 
-scene.add(lines);
+function animate(time) {
+    box.rotation.x = time / 1000;
+    box.rotation.y = time / 1000;
 
-renderer.render(scene, camera);
+    renderer.render(scene, camera)
+}
+
+renderer.setAnimationLoop(animate)
